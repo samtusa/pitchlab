@@ -1,0 +1,20 @@
+# One-click deploy on Render (render.com): New > Blueprint > pick this repo.
+services:
+  - type: web
+    name: pitchlab
+    runtime: docker
+    plan: starter            # persistent disks need a paid plan (~US$7/mo)
+    healthCheckPath: /api/seasons
+    envVars:
+      - key: PITCHLAB_DATA_DIR
+        value: /var/data
+      - key: PITCHLAB_SEASONS
+        value: "2025 2026"
+      - key: PITCHLAB_AUTO_REFRESH   # pulls new games daily, March-October
+        value: "1"
+      - key: PITCHLAB_REFRESH_TOKEN  # needed to call POST /api/refresh
+        generateValue: true
+    disk:
+      name: pitchlab-data
+      mountPath: /var/data
+      sizeGB: 2
